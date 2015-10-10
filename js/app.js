@@ -30,6 +30,10 @@ Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.update = function(dt) {
     this.x += this.speed * dt;
+
+    if (this.x >= CANVAS_WIDTH) {
+        this.x = 0;
+    }
 };
 
 // Now write your own player class
@@ -115,14 +119,6 @@ Player.prototype.handleInput = function(e) {
     }
 }
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-var player = new Player();
-var allEnemies = [];
-allEnemies.push(new Enemy(0, ROW_HEIGHT * 1 - 20, random(50, 75)));
-
-
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
@@ -135,3 +131,22 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+var checkCollisions = function() {
+    allEnemies.forEach(function(enemy) {
+        if (Math.abs(player.x - enemy.x) <= COL_WIDTH/2 &&
+            Math.abs(player.y - enemy.y) <= ROW_HEIGHT/2) {
+            gameReset();
+        }
+    })
+}
+
+var gameReset = function() {
+    this.player = new Player();
+    this.allEnemies = [];
+    this.allEnemies.push(new Enemy(0, ROW_HEIGHT * 1 - 25, random(50, 75)));
+    this.allEnemies.push(new Enemy(0, ROW_HEIGHT * 2 - 35, random(50, 125)));
+    this.allEnemies.push(new Enemy(0, ROW_HEIGHT * 3 - 40, random(50, 100)));
+}
+
+gameReset();
