@@ -191,15 +191,15 @@ var gameReset = function() {
     this.allEnemies = [];
 
     var level = player.level;
-    if (level > 7) {
-        level = 7;
+    if (level > 5) {
+        level = 5;
     }
 
     for (var i=0; i<level; ++i) {
         var row = getRandomRow();
         var speed = getRandomSpeed(player.level)
         console.log('Row : ' + row + ' speed : ' + speed + ' level : ' + player.level)
-        this.allEnemies.push(new Enemy(0, ENEMY_ROWS[row], speed));
+        this.allEnemies.push(new Enemy(random(-500, -0), ENEMY_ROWS[row], speed));
     };
 }
 
