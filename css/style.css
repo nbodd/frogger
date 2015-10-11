@@ -1,3 +1,6 @@
 body {
     text-align: center;
+    background: url("../images/background5.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
