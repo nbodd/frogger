@@ -77,6 +77,7 @@ var Player = function() {
             PLAYER_POSITIONS[this.position].x, 
             PLAYER_POSITIONS[this.position].y);
     this.level = 1;
+    this.score = 0;
 };
 
 Player.prototype = Object.create(Sprite.prototype)
@@ -100,6 +101,10 @@ Player.prototype.updateLevel = function() {
     this.level++;
 }
 
+Player.prototype.updateScore = function() {
+    this.score += 10;
+}
+
 Player.prototype.handleInput = function(e) {
     if (e == 'left') {
         if ((this.position % 5) != 0) {
@@ -111,7 +116,7 @@ Player.prototype.handleInput = function(e) {
     } else if (e == 'right') {
         if ((this.position % 5) != 4) {
             this.position++;
-            this.setPosition[this.position];
+            this.setPosition(this.position);
         } else {
             console.log('Right border');
         }
@@ -151,6 +156,9 @@ var checkCollisions = function() {
     allEnemies.forEach(function(enemy) {
         if (Math.abs(player.x - enemy.x) <= COL_WIDTH/2 &&
             Math.abs(player.y - enemy.y) <= ROW_HEIGHT/2) {
+            if (player.score > 0) {
+                player.score = 0.90 * player.score;
+            }
             gameReset();
         }
     })
@@ -158,9 +166,21 @@ var checkCollisions = function() {
 
 var checkLevelComplete = function() {
     if (player.position < 5) {
+        player.updateScore();
         player.updateLevel();
         gameReset();
     }
+}
+
+var displayStats = function() {
+    var context = this.ctx;
+    context.fillStyle = "white";
+    context.font = "16px Consolas";
+    var levelText = "Level : " + player.level;
+    context.fillText(levelText, 10, 75);
+
+    var scoreText = "Score: " + Math.floor(player.score);
+    context.fillText(scoreText, 410, 75);
 }
 
 var gameInit = function() {
